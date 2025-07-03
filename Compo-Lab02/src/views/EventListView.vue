@@ -4,8 +4,10 @@ import CategoryInfo from '@/components/CategoryInfo.vue'
 import type { Event } from '@/types'
 import { ref, onMounted } from 'vue'
 import EventService from '@/services/EventService'
+import StudentService from '@/services/StudentService'
 
 const events = ref<Event[]>(null)
+const students = ref<Student[]>([])
 
 onMounted(() =>{
   EventService.getEvents()
@@ -14,6 +16,13 @@ onMounted(() =>{
     })
     .catch(error => {
       console.error('Error fetching events:', error)
+    })
+    StudentService.getStudents()
+    .then((response) => {
+      students.value = response.data
+    })
+    .catch((error) => {
+      console.error('There was an error!', error)
     })
 })
 </script>
@@ -26,6 +35,9 @@ onMounted(() =>{
   </div>
   <div class="category">
     <CategoryInfo v-for="event in events" :key="event.id" :event="event" />
+  </div>
+  <div class="students">
+    <StudentCard v-for="student in students" :key="student.id" :student="student" />
   </div>
 </template>
 
