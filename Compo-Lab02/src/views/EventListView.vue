@@ -4,40 +4,29 @@ import CategoryInfo from '@/components/CategoryInfo.vue'
 import type { Event } from '@/types'
 import { ref, onMounted } from 'vue'
 import EventService from '@/services/EventService'
-import StudentService from '@/services/StudentService'
 
-const events = ref<Event[]>(null)
-const students = ref<Student[]>([])
+const events = ref<Event[]>([])
 
-onMounted(() =>{
+onMounted(() => {
   EventService.getEvents()
-    .then( (response) => {
+    .then((response) => {
+      console.log(response.data)
       events.value = response.data
     })
-    .catch(error => {
-      console.error('Error fetching events:', error)
-    })
-    StudentService.getStudents()
-    .then((response) => {
-      students.value = response.data
-    })
     .catch((error) => {
-      console.error('There was an error!', error)
+      console.log('There was an error!', error)
     })
 })
 </script>
 
 <template>
   <h1>Events For Good</h1>
-  <!-- new element -->
   <div class="events">
     <EventCard v-for="event in events" :key="event.id" :event="event" />
   </div>
+
   <div class="category">
     <CategoryInfo v-for="event in events" :key="event.id" :event="event" />
-  </div>
-  <div class="students">
-    <StudentCard v-for="student in students" :key="student.id" :student="student" />
   </div>
 </template>
 
