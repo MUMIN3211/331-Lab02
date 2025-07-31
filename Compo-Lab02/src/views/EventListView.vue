@@ -30,8 +30,7 @@ const pageSize = computed(() => props.pageSize)
 
 onMounted(() => {
   watchEffect(() => {
-    events.value = null
-
+    
     EventService.getEvents(pageSize.value, page.value)
       .then((response) => {
         console.log(response.data)
@@ -58,12 +57,12 @@ onMounted(() => {
   </div>
 
   <h1>Events For Good</h1>
-  <div class="flex flex-col items-center">
+  <div class="events">
     <EventCard v-for="event in events" :key="event.id" :event="event" />
     <div class="pagination">
       <router-link
         id="page-prev"
-        :to="{ name: 'home', query: { page: page - 1, pageSize: pageSize } }"
+        :to="{ name: 'home', query: { page: page - 1 , pageSize: pageSize } }"
         rel="prev"
         v-if="page != 1"
       >
@@ -71,7 +70,7 @@ onMounted(() => {
       </router-link>
       <router-link
         id="page-next"
-        :to="{ name: 'home', query: { page: page + 1, pageSize: pageSize } }"
+        :to="{ name: 'home', query: { page: page + 1 , pageSize: pageSize} }"
         rel="next"
         v-if="hasNexPage"
       >
@@ -93,6 +92,11 @@ onMounted(() => {
   margin: 20px 0;
 }
 
+.events {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .category {
   display: flex;
