@@ -1,24 +1,30 @@
 <script setup lang="ts">
+import type { Student } from '@/types'
 defineProps<{
-  name: string
-  surname: string
-  gpa: number
+  student: Student
 }>()
 </script>
 
 <template>
-  <div class="student-card">
-    <h2>{{ name }} {{ surname }}</h2>
-    <p>GPA: {{ gpa }}</p>
+  <div class="event-class">
+    <div class="Student-card">
+      <h2>{{ student.name }} {{ student.surname }}</h2>
+      <h3>{{ student.gpa }}</h3>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.student-card {
+.Student-card {
+  padding: 20px;
+  width: 250px;
+  cursor: pointer;
   border: 1px solid #39495c;
-  padding: 16px;
-  margin-bottom: 16px;
-  width: 300px;
-  text-align: center;
+  margin-bottom: 18px;
+}
+
+.Student-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
 }
 </style>

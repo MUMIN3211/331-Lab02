@@ -1,44 +1,23 @@
 <script setup lang="ts">
-import EventCard from '../components/EventCard.vue'
-import { ref } from 'vue'
-import type { Event } from '@/types'
+import { type Event } from '@/types'
+
 defineProps<{
   event: Event
 }>()
-// const event = ref({
-//   id: 5928101,
-//   category: 'animal welfare',
-//   title: 'Cat Adoption Day',
-//   description: 'Find your new feline friend at this event.',
-//   location: 'Meow Town',
-//   date: 'January 28, 2022',
-//   time: '12:00',
-//   petsAllowed: true,
-//   organizer: 'Kat Laydee'
-// })
-
 </script>
 
 <template>
-  <div class="event-class">
-    <div class="event-card">
-      <h2>{{ event.title }}</h2>
-      <span>@{{ event.time }} on {{ event.date }}</span>
+  <router-link
+    :to="{ name: 'event-detail-view', params: { id: event.id } }"
+    class="no-underline text-gray-800"
+  >
+    <div
+      class="border border-gray-500 p-5 w-[250px] mb-5 cursor-pointer rounded-md transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-md bg-white"
+    >
+      <h2 class="text-lg font-semibold mb-1">{{ event.title }}</h2>
+      <span class="text-sm text-gray-600 block">
+        @{{ event.time }} on {{ event.date }}
+      </span>
     </div>
-  </div>
+  </router-link>
 </template>
-
-<style scoped>
-.event-card {
-  padding: 20px;
-  width: 250px;
-  cursor: pointer;
-  border: 1px solid #39495c;
-  margin-bottom: 18px;
-}
-
-.event-card:hover {
-  transform: scale(1.01);
-  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
-}
-</style>

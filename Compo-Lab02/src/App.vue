@@ -1,61 +1,55 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { useMessageStore } from './stores/message'
+import { storeToRefs } from 'pinia'
 
+const store = useMessageStore()
+const { message } = storeToRefs(store)
 </script>
 
 <template>
- <div id="layout">
-  <header>
-    <div class="wrapper">
-      <nav>
-          <RouterLink to="/">Event</RouterLink>
-          <span class="nav-separator">|</span>
-          <RouterLink to="/about">About</RouterLink>
-          <span class="nav-separator">|</span>
-          <RouterLink to="/students">Student</RouterLink>
+  <div class="font-sans text-gray-800 antialiased min-h-screen bg-gray-50 flex flex-col items-center ">
+    <!-- Header -->
+    <header class="w-full bg-white shadow-sm py-4 px-6">
+      
+      <!-- Flash Message -->
+      <div
+        v-if="message"
+        class="mb-4 mx-auto max-w-xl rounded-md border border-green-300 bg-green-100 text-green-800 text-center py-2 px-4 animate-fade-in-down"
+      >
+        <h4 class="text-sm font-medium">{{ message }}</h4>
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex justify-center gap-6 text-sm sm:text-base">
+        <RouterLink
+          :to="{ name: 'home' }"
+          class="relative font-semibold text-gray-700 hover:text-emerald-500 transition-colors duration-200 after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-emerald-400 after:transition-all after:duration-300"
+        >
+          Event
+        </RouterLink>
+
+        <RouterLink
+          :to="{ name: 'about' }"
+          class="relative font-semibold text-gray-700 hover:text-emerald-500 transition-colors duration-200 after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-emerald-400 after:transition-all after:duration-300"
+        >
+          About
+        </RouterLink>
+
+        <RouterLink
+          :to="{ name: 'students' }"
+          class="relative font-semibold text-gray-700 hover:text-emerald-500 transition-colors duration-200 after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-emerald-400 after:transition-all after:duration-300"
+        >
+          Students
+        </RouterLink>
       </nav>
-    </div>
-  </header>
-    <RouterView />
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-4xl px-4 py-8">
+      <RouterView />
+    </main>
+
+    
   </div>
 </template>
-
-<style>
-#layout {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
- 
-}
-
-h2 {
-  font-size: 20px;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  color: #2c3e50;
-  text-decoration: none;
-  margin: 0 5px;
-  transition: color 0.2s;
-}
-
-nav a:hover {
-  color: #005a3c;
-}
-
-.nav-separator {
-  margin: 0 8px;
-  color: #888;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-  text-decoration: underline;
-}
-</style>

@@ -1,40 +1,33 @@
 <script setup lang="ts">
+import type { Student } from '@/types'
 import { ref, onMounted } from 'vue'
 import StudentService from '@/services/StudentService'
 import StudentCard from '@/components/StudentCard.vue'
 
-interface Student {
-  id: number
-  name: string
-  surname: string
-  gpa: number
-}
-
 const students = ref<Student[]>([])
 
-onMounted(async () => {
-  const response = await StudentService.getStudents()
-  students.value = response.data
+onMounted(() => {
+  StudentService.getStudents()
+    .then((response) => {
+      console.log(response.data)
+      students.value = response.data
+    })
+    .catch((error) => {
+      console.log('There was an error!', error)
+    })
 })
 </script>
 
 <template>
-  <h1>Student List</h1>
-  <div class="students">
-    <StudentCard
-      v-for="student in students"
-      :key="student.id"
-      :name="student.name"
-      :surname="student.surname"
-      :gpa="student.gpa"
-    />
+  <div class="flex flex-col items-center py-8 px-4">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6">Students</h1>
+    
+    <div class="flex flex-col items-center gap-4 w-full max-w-2xl">
+      <StudentCard
+        v-for="student in students"
+        :key="student.id"
+        :student="student"
+      />
+    </div>
   </div>
 </template>
-
-<style scoped>
-.students {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-</style>
