@@ -19,7 +19,7 @@ const { message } = storeToRefs(store)
       >
         <h4 class="text-sm font-medium">{{ message }}</h4>
       </div>
-
+      <h1>Deploy with vercel</h1>
       <!-- Nav -->
       <nav class="flex justify-center gap-6 text-sm sm:text-base">
         <RouterLink
