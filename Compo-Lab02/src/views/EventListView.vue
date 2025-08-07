@@ -7,10 +7,6 @@ import EventService from '@/services/EventService'
 
 const events = ref<Event[] | null>([])
 const totalEvents = ref(0)
-const hasNexPage = computed(() => {
-  const totalPages = Math.ceil(totalEvents.value / pageSize.value)
-  return page.value < totalPages
-})
 
 const props = defineProps({
   page: {
@@ -23,98 +19,79 @@ const props = defineProps({
   },
 })
 
-const pageSizeOption = [2, 3, 4, 6]
-
 const page = computed(() => props.page)
 const pageSize = computed(() => props.pageSize)
 
+const hasNexPage = computed(() => {
+  const totalPages = Math.ceil(totalEvents.value / pageSize.value)
+  return page.value < totalPages
+})
+
+const pageSizeOption = [2, 3, 4, 6]
+
 onMounted(() => {
   watchEffect(() => {
-    
     EventService.getEvents(pageSize.value, page.value)
       .then((response) => {
-        console.log(response.data)
-
         events.value = response.data
         totalEvents.value = response.headers['x-total-count']
       })
       .catch((error) => {
-        console.log('There was an error!', error)
+        console.error('There was an error!', error)
       })
   })
 })
 </script>
 
 <template>
-  <div class="page-size-links">
+  <!-- Page Size Selection -->
+  <div class="flex justify-center gap-4 my-6">
     <router-link
       v-for="size in pageSizeOption"
       :key="size"
       :to="{ name: 'home', query: { page: 1, pageSize: size } }"
-      :class="{ active: pageSize === size }"
-      ><button>{{ size }} per page</button>
+    >
+      <button
+        :class="[
+          'px-3 py-1 rounded border text-sm font-medium transition-all duration-200',
+          pageSize === size
+            ? 'bg-emerald-500 text-white border-emerald-500'
+            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100',
+        ]"
+      >
+        {{ size }} per page
+      </button>
     </router-link>
   </div>
 
-  <h1>Events For Good</h1>
-  <div class="flex flex-col items-center">
+  <!-- Heading -->
+  <h1 class="text-2xl font-semibold text-center text-gray-800 mb-6">Events For Good</h1>
+
+  <!-- Events and Pagination -->
+  <div class="flex flex-col items-center space-y-6">
     <EventCard v-for="event in events" :key="event.id" :event="event" />
-    <div class="pagination">
+
+    <div class="flex justify-between w-72 text-sm text-gray-600 font-medium">
       <router-link
-        id="page-prev"
-        :to="{ name: 'home', query: { page: page - 1 , pageSize: pageSize } }"
-        rel="prev"
-        v-if="page != 1"
+        v-if="page !== 1"
+        :to="{ name: 'home', query: { page: page - 1, pageSize: pageSize } }"
+        class="hover:text-emerald-500 transition-colors"
       >
         &#60; Prev Page
       </router-link>
+      <div></div>
       <router-link
-        id="page-next"
-        :to="{ name: 'home', query: { page: page + 1 , pageSize: pageSize} }"
-        rel="next"
         v-if="hasNexPage"
+        :to="{ name: 'home', query: { page: page + 1, pageSize: pageSize } }"
+        class="hover:text-emerald-500 transition-colors"
       >
         Next Page &#62;
       </router-link>
     </div>
   </div>
 
-  <div class="category">
+  <!-- Category Info Section -->
+  <div class="flex flex-col items-end mt-10 space-y-4">
     <CategoryInfo v-for="event in events" :key="event.id" :event="event" />
   </div>
 </template>
-
-<style scoped>
-.page-size-links {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-
-
-.category {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.pagination {
-  display: flex;
-  width: 290px;
-}
-.pagination a {
-  flex: 1;
-  text-decoration: none;
-  color: #2c3e50;
-}
-
-#page-prev {
-  text-align: left;
-}
-
-#page-next {
-  text-align: right;
-}
-</style>
