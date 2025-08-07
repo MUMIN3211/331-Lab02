@@ -2,12 +2,14 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { useMessageStore } from './stores/message'
 import { storeToRefs } from 'pinia'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const store = useMessageStore()
 const { message } = storeToRefs(store)
 </script>
 
 <template>
+  <SpeedInsights />
   <div class="font-sans text-gray-800 antialiased min-h-screen bg-gray-50 flex flex-col items-center ">
     <!-- Header -->
     <header class="w-full bg-white shadow-sm py-4 px-6">
